@@ -24,13 +24,13 @@ fun main(args: Array<String>) {
     client.apply {
         val jc = JavConfig.load()
         setStub(JavConfigStub(jc))
+        minimumSize = Dimension(200, 350)
         maximumSize = Dimension(jc[JavConfig.Key.APPLET_MAXWIDTH.toString()]!!.toInt(), jc[JavConfig.Key.APPLET_MAXHEIGHT.toString()]!!.toInt())
         preferredSize = Dimension(jc[JavConfig.Key.APPLET_MINWIDTH.toString()]!!.toInt(), jc[JavConfig.Key.APPLET_MINHEIGHT.toString()]!!.toInt())
         init()
         start()
     }
     JFrame("Runescape").apply {
-        minimumSize = Dimension(200, 350)
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         add(client)
         pack()
