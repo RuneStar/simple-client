@@ -4,4 +4,4 @@
 
 * Caches gamepack between runs
 * Unrestricted minimum size
-* More sensible default size
+* Corrected default size
