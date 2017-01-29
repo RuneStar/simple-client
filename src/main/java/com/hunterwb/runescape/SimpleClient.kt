@@ -12,21 +12,21 @@ import javax.swing.JFrame
 import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
-    val revision = Server.findCurrentRevision()
+    val revision = RuneScape.revision
     val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack-$revision.jar").toFile()
     try {
         JarFile(jar, true)
     } catch (e: Exception) {
-        Server.downloadGamepack(jar)
+        Server.downloadGamepack(jar.toPath())
     }
     val classLoader = URLClassLoader(arrayOf(jar.toURI().toURL()))
     val client = classLoader.loadClass("client").newInstance() as Applet
     client.apply {
-        val jc = JavConfig.load()
+        val jc = JavConfig()
         setStub(JavConfigStub(jc))
         minimumSize = Dimension(200, 350)
-        maximumSize = Dimension(jc[JavConfig.Key.APPLET_MAXWIDTH.toString()]!!.toInt(), jc[JavConfig.Key.APPLET_MAXHEIGHT.toString()]!!.toInt())
-        preferredSize = Dimension(jc[JavConfig.Key.APPLET_MINWIDTH.toString()]!!.toInt(), jc[JavConfig.Key.APPLET_MINHEIGHT.toString()]!!.toInt())
+        maximumSize = Dimension(jc.get(JavConfig.Key.APPLET_MAXWIDTH).toInt(), jc.get(JavConfig.Key.APPLET_MAXHEIGHT).toInt())
+        preferredSize = Dimension(jc.get(JavConfig.Key.APPLET_MINWIDTH).toInt(), jc.get(JavConfig.Key.APPLET_MINHEIGHT).toInt())
         init()
         start()
     }
@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
     }
 }
 
-class JavConfigStub(private val javConfig: Map<String, String>) : AppletStub {
+class JavConfigStub(private val javConfig: JavConfig) : AppletStub {
 
     override fun getDocumentBase(): URL = codeBase
 
@@ -48,7 +48,7 @@ class JavConfigStub(private val javConfig: Map<String, String>) : AppletStub {
 
     override fun getParameter(name: String): String? = javConfig[name]
 
-    override fun getCodeBase(): URL = URL(javConfig[JavConfig.Key.CODEBASE.toString()])
+    override fun getCodeBase(): URL = URL(javConfig.get(JavConfig.Key.CODEBASE))
 
     override fun getAppletContext(): AppletContext? = null
 
