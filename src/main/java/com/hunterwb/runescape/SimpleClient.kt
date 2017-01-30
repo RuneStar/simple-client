@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     try {
         JarFile(jar, true)
     } catch (e: Exception) {
-        Server.downloadGamepack(jar.toPath())
+        RuneScape.downloadGamepack(jar.toPath())
     }
     val classLoader = URLClassLoader(arrayOf(jar.toURI().toURL()))
     val client = classLoader.loadClass("client").newInstance() as Applet
@@ -25,8 +25,8 @@ fun main(args: Array<String>) {
         val jc = JavConfig()
         setStub(JavConfigStub(jc))
         minimumSize = Dimension(200, 350)
-        maximumSize = Dimension(jc.get(JavConfig.Key.APPLET_MAXWIDTH).toInt(), jc.get(JavConfig.Key.APPLET_MAXHEIGHT).toInt())
-        preferredSize = Dimension(jc.get(JavConfig.Key.APPLET_MINWIDTH).toInt(), jc.get(JavConfig.Key.APPLET_MINHEIGHT).toInt())
+        maximumSize = Dimension(jc[JavConfig.Key.APPLET_MAXWIDTH].toInt(), jc[JavConfig.Key.APPLET_MAXHEIGHT].toInt())
+        preferredSize = Dimension(jc[JavConfig.Key.APPLET_MINWIDTH].toInt(), jc[JavConfig.Key.APPLET_MINHEIGHT].toInt())
         init()
         start()
     }
