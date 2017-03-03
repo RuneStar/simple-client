@@ -1,5 +1,7 @@
-package com.hunterwb.runescape
+package com.runesuite
 
+import com.runesuite.general.JavConfig
+import com.runesuite.general.RuneScape
 import java.applet.Applet
 import java.applet.AppletContext
 import java.applet.AppletStub
@@ -23,6 +25,7 @@ fun main(args: Array<String>) {
     val client = classLoader.loadClass("client").newInstance() as Applet
     client.apply {
         val jc = JavConfig()
+        layout = null
         setStub(JavConfigStub(jc))
         minimumSize = Dimension(200, 350)
         maximumSize = Dimension(jc[JavConfig.Key.APPLET_MAXWIDTH].toInt(), jc[JavConfig.Key.APPLET_MAXHEIGHT].toInt())
