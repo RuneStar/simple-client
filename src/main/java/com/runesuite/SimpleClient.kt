@@ -51,7 +51,7 @@ class JavConfigStub(private val javConfig: JavConfig) : AppletStub {
 
     override fun getParameter(name: String): String? = javConfig[name]
 
-    override fun getCodeBase(): URL = URL(javConfig.get(JavConfig.Key.CODEBASE))
+    override fun getCodeBase(): URL = javConfig.url
 
     override fun getAppletContext(): AppletContext? = null
 
