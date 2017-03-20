@@ -28,8 +28,8 @@ fun main(args: Array<String>) {
         layout = null
         setStub(JavConfigStub(jc))
         minimumSize = Dimension(200, 350)
-        maximumSize = Dimension(jc[JavConfig.Key.APPLET_MAXWIDTH].toInt(), jc[JavConfig.Key.APPLET_MAXHEIGHT].toInt())
-        preferredSize = Dimension(jc[JavConfig.Key.APPLET_MINWIDTH].toInt(), jc[JavConfig.Key.APPLET_MINHEIGHT].toInt())
+        maximumSize = jc.appletMaxSize
+        preferredSize = jc.appletMinSize
         init()
         start()
     }
@@ -38,6 +38,7 @@ fun main(args: Array<String>) {
         add(client)
         pack()
         preferredSize = size
+        minimumSize = client.minimumSize
         setLocationRelativeTo(null)
         isVisible = true
     }
