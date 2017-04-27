@@ -1,4 +1,4 @@
-# A simple client for Oldschool Runescape
+# A simple client for Old School RuneScape
 
 ## Features
 
