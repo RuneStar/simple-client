@@ -14,7 +14,7 @@ import javax.swing.JFrame
 import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
-    val revision = RuneScape.revision
+    val revision = RuneScape.updateRevision()
     val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack-$revision.jar").toFile()
     try {
         JarFile(jar, true)
