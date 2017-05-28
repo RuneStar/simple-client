@@ -30,8 +30,6 @@ fun main(args: Array<String>) {
         minimumSize = Dimension(200, 350)
         maximumSize = jc.appletMaxSize
         preferredSize = jc.appletMinSize
-        init()
-        start()
     }
     JFrame("Runescape").apply {
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
@@ -41,6 +39,10 @@ fun main(args: Array<String>) {
         minimumSize = client.minimumSize
         setLocationRelativeTo(null)
         isVisible = true
+    }
+    client.apply {
+        init()
+        start()
     }
 }
 
