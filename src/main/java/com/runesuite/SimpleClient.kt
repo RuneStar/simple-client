@@ -15,23 +15,23 @@ import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
     val revision = RuneScape.updateRevision()
-    val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack-$revision.jar").toFile()
+    val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack.$revision.jar").toFile()
     try {
         JarFile(jar, true)
     } catch (e: Exception) {
         RuneScape.downloadGamepack(jar.toPath())
     }
+    val jc = JavConfig()
     val classLoader = URLClassLoader(arrayOf(jar.toURI().toURL()))
-    val client = classLoader.loadClass("client").newInstance() as Applet
+    val client = classLoader.loadClass(jc.initialClass).newInstance() as Applet
     client.apply {
-        val jc = JavConfig()
         layout = null
         setStub(JavConfigStub(jc))
         minimumSize = Dimension(200, 350)
         maximumSize = jc.appletMaxSize
         preferredSize = jc.appletMinSize
     }
-    JFrame("Runescape").apply {
+    JFrame("RuneScape").apply {
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         add(client)
         pack()
@@ -46,7 +46,7 @@ fun main(args: Array<String>) {
     }
 }
 
-class JavConfigStub(private val javConfig: JavConfig) : AppletStub {
+private class JavConfigStub(private val javConfig: JavConfig) : AppletStub {
 
     override fun getDocumentBase(): URL = codeBase
 

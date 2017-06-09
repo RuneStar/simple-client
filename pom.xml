@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.runesuite</groupId>
             <artifactId>general</artifactId>
-            <version>0.1.10+143</version>
+            <version>0.144.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
