@@ -6,7 +6,7 @@
 
     <groupId>com.runesuite</groupId>
     <artifactId>simple-client</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <properties>
         <kotlin.version>1.1.2</kotlin.version>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.runesuite</groupId>
             <artifactId>general</artifactId>
-            <version>0.144.0</version>
+            <version>0.145.1</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
