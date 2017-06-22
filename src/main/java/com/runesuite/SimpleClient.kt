@@ -14,6 +14,7 @@ import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
     val revision = RuneScape.updateRevision()
+    System.setProperty("sun.awt.noerasebackground", true.toString())
     val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack.$revision.jar")
     try {
         JarFile(jar.toFile(), true)
