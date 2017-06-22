@@ -3,11 +3,8 @@ package com.runesuite
 import com.runesuite.general.JavConfig
 import com.runesuite.general.RuneScape
 import java.applet.Applet
-import java.applet.AppletContext
-import java.applet.AppletStub
 import java.awt.Dimension
 import java.io.IOException
-import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -32,7 +29,7 @@ fun launch(gamepack: Path, javConfig: JavConfig = JavConfig()) {
     val client = classLoader.loadClass(javConfig.initialClass).newInstance() as Applet
     client.apply {
         layout = null
-        setStub(JavConfigStub(javConfig))
+        setStub(JavConfig.AppletStub(javConfig))
         minimumSize = Dimension(200, 350)
         maximumSize = javConfig.appletMaxSize
         preferredSize = javConfig.appletMinSize
@@ -51,19 +48,4 @@ fun launch(gamepack: Path, javConfig: JavConfig = JavConfig()) {
         init()
         start()
     }
-}
-
-class JavConfigStub(val javConfig: JavConfig) : AppletStub {
-
-    override fun getDocumentBase(): URL = codeBase
-
-    override fun appletResize(width: Int, height: Int) { }
-
-    override fun getParameter(name: String): String? = javConfig[name]
-
-    override fun getCodeBase(): URL = javConfig.url
-
-    override fun getAppletContext(): AppletContext? = null
-
-    override fun isActive(): Boolean = true
 }
