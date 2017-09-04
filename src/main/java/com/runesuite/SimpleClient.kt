@@ -14,7 +14,7 @@ import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
     val revision = RuneScape.updateRevision()
-    System.setProperty("sun.awt.noerasebackground", true.toString())
+    System.setProperty("sun.awt.noerasebackground", true.toString()) // fixes resize flickering
     val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack.$revision.jar")
     try {
         JarFile(jar.toFile(), true)
@@ -29,7 +29,7 @@ fun launch(gamepack: Path, javConfig: JavConfig = JavConfig()) {
     val classLoader = URLClassLoader(arrayOf(gamepack.toUri().toURL()))
     val client = classLoader.loadClass(javConfig.initialClass).newInstance() as Applet
     client.apply {
-        layout = null
+        layout = null // fixes resize bouncing
         setStub(JavConfig.AppletStub(javConfig))
         minimumSize = Dimension(200, 350)
         maximumSize = javConfig.appletMaxSize
