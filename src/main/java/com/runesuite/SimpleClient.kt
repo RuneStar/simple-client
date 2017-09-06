@@ -1,7 +1,8 @@
 package com.runesuite
 
 import com.runesuite.general.JavConfig
-import com.runesuite.general.RuneScape
+import com.runesuite.general.downloadGamepack
+import com.runesuite.general.updateRevision
 import java.applet.Applet
 import java.awt.Dimension
 import java.io.IOException
@@ -13,14 +14,14 @@ import javax.swing.JFrame
 import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
-    val revision = RuneScape.updateRevision()
+    val revision = updateRevision()
     System.setProperty("sun.awt.noerasebackground", true.toString()) // fixes resize flickering
     val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack.$revision.jar")
     try {
         JarFile(jar.toFile(), true)
     } catch (e: IOException) {
         // jar does not exist or was partially downloaded
-        RuneScape.downloadGamepack(jar)
+        downloadGamepack(jar)
     }
     launch(jar)
 }
