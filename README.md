@@ -6,3 +6,5 @@
 * Unrestricted minimum size
 * Corrected default size
 * Fixed bouncing and flashing while resizing
+
+Uses [general](https://github.com/RuneSuite/general)
