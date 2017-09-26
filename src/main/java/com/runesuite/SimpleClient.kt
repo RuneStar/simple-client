@@ -3,7 +3,6 @@ package com.runesuite
 import com.runesuite.general.JavConfig
 import com.runesuite.general.downloadGamepack
 import com.runesuite.general.updateRevision
-import java.applet.Applet
 import java.awt.Dimension
 import java.io.IOException
 import java.net.URLClassLoader
@@ -28,7 +27,8 @@ fun main(args: Array<String>) {
 
 fun launch(gamepack: Path, javConfig: JavConfig = JavConfig()) {
     val classLoader = URLClassLoader(arrayOf(gamepack.toUri().toURL()))
-    val client = classLoader.loadClass(javConfig.initialClass).newInstance() as Applet
+    @Suppress("DEPRECATION")
+    val client = classLoader.loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as java.applet.Applet
     client.apply {
         layout = null // fixes resize bouncing
         setStub(JavConfig.AppletStub(javConfig))
