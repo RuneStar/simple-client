@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString()) // fixes resize flickering
     val jar = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack.$revision.jar")
     try {
-        JarFile(jar.toFile(), true)
+        JarFile(jar.toFile(), true).close()
     } catch (e: IOException) {
         // jar does not exist or was partially downloaded
         downloadGamepack(jar)
