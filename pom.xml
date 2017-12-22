@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <kotlin.version>1.1.61</kotlin.version>
+        <kotlin.version>1.2.10</kotlin.version>
         <kotlin.groupId>org.jetbrains.kotlin</kotlin.groupId>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.runesuite</groupId>
             <artifactId>general</artifactId>
-            <version>0.158.0</version>
+            <version>0.160.0</version>
         </dependency>
         <dependency>
             <groupId>${kotlin.groupId}</groupId>

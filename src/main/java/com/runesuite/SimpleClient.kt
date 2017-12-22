@@ -25,10 +25,14 @@ fun main(args: Array<String>) {
     launch(jar)
 }
 
-fun launch(gamepack: Path, javConfig: JavConfig = JavConfig()) {
+fun launch(
+        gamepack: Path,
+        javConfig: JavConfig = JavConfig.load()
+) {
     val classLoader = URLClassLoader(arrayOf(gamepack.toUri().toURL()))
+    val clientConstructor = classLoader.loadClass(javConfig.initialClass).getDeclaredConstructor()
     @Suppress("DEPRECATION")
-    val client = classLoader.loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as java.applet.Applet
+    val client = clientConstructor.newInstance() as java.applet.Applet
     client.apply {
         layout = null // fixes resize bouncing
         setStub(JavConfig.AppletStub(javConfig))
@@ -37,7 +41,7 @@ fun launch(gamepack: Path, javConfig: JavConfig = JavConfig()) {
         preferredSize = javConfig.appletMinSize
         size = preferredSize
     }
-    JFrame(javConfig[JavConfig.Key.TITLE]).apply {
+    JFrame(javConfig[JavConfig.Key.Default.TITLE]).apply {
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         add(client)
         pack()
