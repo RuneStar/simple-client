@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.runesuite</groupId>
+    <groupId>org.runestar</groupId>
     <artifactId>simple-client</artifactId>
     <version>0.1.7-SNAPSHOT</version>
 
@@ -20,16 +20,16 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>repo.runestar.org</id>
+            <url>http://repo.runestar.org</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.runesuite</groupId>
+            <groupId>org.runestar</groupId>
             <artifactId>general</artifactId>
-            <version>0.160.0</version>
+            <version>0.160.1</version>
         </dependency>
         <dependency>
             <groupId>${kotlin.groupId}</groupId>
@@ -76,7 +76,7 @@
                             <minimizeJar>true</minimizeJar>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.runesuite.SimpleClientKt</mainClass>
+                                    <mainClass>org.runestar.SimpleClientKt</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

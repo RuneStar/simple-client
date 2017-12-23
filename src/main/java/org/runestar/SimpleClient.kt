@@ -1,8 +1,8 @@
-package com.runesuite
+package org.runestar
 
-import com.runesuite.general.JavConfig
-import com.runesuite.general.downloadGamepack
-import com.runesuite.general.updateRevision
+import org.runestar.general.JavConfig
+import org.runestar.general.downloadGamepack
+import org.runestar.general.updateRevision
 import java.awt.Dimension
 import java.io.IOException
 import java.net.URLClassLoader
