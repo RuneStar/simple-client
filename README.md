@@ -1,6 +1,6 @@
 # A simple client for Old School RuneScape
 
-[Download](https://github.com/RuneStar/simple-client/releases)
+[**Download**](https://github.com/RuneStar/simple-client/releases)
 
 Requires Java 8+
 
