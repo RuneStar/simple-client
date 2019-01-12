@@ -144,7 +144,7 @@ public final class JavConfig {
             try {
                 Desktop.getDesktop().browse(url.toURI());
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
 
