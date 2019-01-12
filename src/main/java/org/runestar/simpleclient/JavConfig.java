@@ -69,7 +69,8 @@ public final class JavConfig {
         Map<String, String> parameters = new LinkedHashMap<>();
         URL url = new URL("http://oldschool.runescape.com/jav_config.ws");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1))) {
-            reader.lines().forEach(line -> {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 String[] split1 = line.split("=", 2);
                 switch (split1[0]) {
                     case "param":
@@ -82,7 +83,7 @@ public final class JavConfig {
                     default:
                         defaults.put(split1[0], split1[1]);
                 }
-            });
+            }
         }
         return new JavConfig(defaults, parameters);
     }

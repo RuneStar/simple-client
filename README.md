@@ -2,7 +2,7 @@
 
 [**Download**](https://github.com/RuneStar/simple-client/releases) (~10 KB)
 
-Requires Java 8+
+Requires Java 7+
 
 ## Features
 
