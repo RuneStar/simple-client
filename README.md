@@ -1,6 +1,8 @@
 # A simple client for Old School RuneScape
 
-[**Download**](https://github.com/RuneStar/simple-client/releases) (~10 KB)
+[![Discord](https://img.shields.io/discord/384870460640329728.svg?logo=discord)](https://discord.gg/G2kxrnU)
+
+[**Download**](https://github.com/RuneStar/simple-client/releases)
 
 Requires Java 7+
 
