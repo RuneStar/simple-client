@@ -1,8 +1,9 @@
 package org.runestar.simpleclient;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 import java.applet.Applet;
-import java.awt.*;
+import java.awt.Dimension;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
