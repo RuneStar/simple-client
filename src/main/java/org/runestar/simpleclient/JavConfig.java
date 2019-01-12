@@ -2,71 +2,77 @@ package org.runestar.simpleclient;
 
 import java.applet.Applet;
 import java.applet.AppletContext;
+import java.applet.AppletStub;
 import java.applet.AudioClip;
-import java.awt.*;
-import java.io.*;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class JavConfig {
 
-    Map<String, String> defaults;
+    final Map<String, String> properties;
 
-    Map<String, String> parameters;
+    final Map<String, String> parameters;
 
     private JavConfig(
-            Map<String, String> defaults,
+            Map<String, String> properties,
             Map<String, String> parameters
     ) {
-        this.defaults = defaults;
+        this.properties = properties;
         this.parameters = parameters;
     }
 
     public String title() {
-        return defaults.get("title");
+        return properties.get("title");
     }
 
     public URL codeBase() {
         try {
-            return new URL(defaults.get("codebase"));
+            return new URL(properties.get("codebase"));
         } catch (MalformedURLException e) {
             throw new InvalidParameterException();
         }
     }
 
     public URL gamepackUrl() throws MalformedURLException {
-        return new URL(defaults.get("codebase") + defaults.get("initial_jar"));
+        return new URL(properties.get("codebase") + properties.get("initial_jar"));
 
     }
 
     public Dimension appletMinSize() {
         return new Dimension(
-                Integer.parseInt(defaults.get("applet_minwidth")),
-                Integer.parseInt(defaults.get("applet_minheight"))
+                Integer.parseInt(properties.get("applet_minwidth")),
+                Integer.parseInt(properties.get("applet_minheight"))
         );
     }
 
     public Dimension appletMaxSize() {
         return new Dimension(
-                Integer.parseInt(defaults.get("applet_maxwidth")),
-                Integer.parseInt(defaults.get("applet_maxheight"))
+                Integer.parseInt(properties.get("applet_maxwidth")),
+                Integer.parseInt(properties.get("applet_maxheight"))
         );
     }
 
     public String initialClass() {
-        String fileName = defaults.get("initial_class");
+        String fileName = properties.get("initial_class");
         return fileName.substring(0, fileName.length() - 6);
     }
 
     public static JavConfig load() throws IOException {
-        Map<String, String> defaults = new LinkedHashMap<>();
-        Map<String, String> parameters = new LinkedHashMap<>();
+        Map<String, String> properties = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
         URL url = new URL("http://oldschool.runescape.com/jav_config.ws");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1))) {
             String line;
@@ -81,15 +87,15 @@ public final class JavConfig {
                         // ignore
                         break;
                     default:
-                        defaults.put(split1[0], split1[1]);
+                        properties.put(split1[0], split1[1]);
                 }
             }
         }
-        return new JavConfig(defaults, parameters);
+        return new JavConfig(properties, parameters);
     }
 
     @SuppressWarnings("deprecation")
-    public class AppletStub implements java.applet.AppletStub, AppletContext {
+    public final class Stub implements AppletStub, AppletContext {
 
         @Override
         public boolean isActive() {
@@ -117,7 +123,7 @@ public final class JavConfig {
         }
 
         @Override
-        public void appletResize(int width, int height) { }
+        public void appletResize(int width, int height) {}
 
         @Override
         public AudioClip getAudioClip(URL url) {

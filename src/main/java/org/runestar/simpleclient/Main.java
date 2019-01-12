@@ -46,7 +46,7 @@ public final class Main {
         @SuppressWarnings("deprecation") Applet client = (Applet) clientConstructor.newInstance();
 
         client.setLayout(null); // fixes resize bouncing
-        client.setStub(javConfig.new AppletStub());
+        client.setStub(javConfig.new Stub());
         client.setMinimumSize(new Dimension(200, 350));
         client.setMaximumSize(javConfig.appletMaxSize());
         client.setPreferredSize(javConfig.appletMinSize());
