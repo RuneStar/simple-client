@@ -87,7 +87,7 @@ public final class Client implements AppletStub, AppletContext {
         return properties.get("title");
     }
 
-    public URL codeBase() {
+    @Override public URL getCodeBase() {
         try {
             return new URL(properties.get("codebase"));
         } catch (MalformedURLException e) {
@@ -143,56 +143,41 @@ public final class Client implements AppletStub, AppletContext {
         return new Client(properties, parameters);
     }
 
-    @Override
-    public boolean isActive() {
+    @Override public boolean isActive() {
         return true;
     }
 
-    @Override
-    public URL getDocumentBase() {
+    @Override public URL getDocumentBase() {
         return getCodeBase();
     }
 
-    @Override
-    public URL getCodeBase() {
-        return codeBase();
-    }
-
-    @Override
-    public String getParameter(String name) {
+    @Override public String getParameter(String name) {
         return parameters.get(name);
     }
 
-    @Override
-    public AppletContext getAppletContext() {
+    @Override public AppletContext getAppletContext() {
         return null;
     }
 
-    @Override
-    public void appletResize(int width, int height) {}
+    @Override public void appletResize(int width, int height) {}
 
-    @Override
-    public AudioClip getAudioClip(URL url) {
+    @Override public AudioClip getAudioClip(URL url) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public Image getImage(URL url) {
+    @Override public Image getImage(URL url) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public Applet getApplet(String name) {
+    @Override public Applet getApplet(String name) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public Enumeration<Applet> getApplets() {
+    @Override public Enumeration<Applet> getApplets() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public void showDocument(URL url) {
+    @Override public void showDocument(URL url) {
         try {
             Desktop.getDesktop().browse(url.toURI());
         } catch (Exception e) {
@@ -200,28 +185,23 @@ public final class Client implements AppletStub, AppletContext {
         }
     }
 
-    @Override
-    public void showDocument(URL url, String target) {
+    @Override public void showDocument(URL url, String target) {
         showDocument(url);
     }
 
-    @Override
-    public void showStatus(String status) {
+    @Override public void showStatus(String status) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public void setStream(String key, InputStream stream) {
+    @Override public void setStream(String key, InputStream stream) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public InputStream getStream(String key) {
+    @Override public InputStream getStream(String key) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public Iterator<String> getStreamKeys() {
+    @Override public Iterator<String> getStreamKeys() {
         throw new UnsupportedOperationException();
     }
 }
