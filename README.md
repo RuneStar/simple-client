@@ -1,14 +1,15 @@
-# A simple client for Old School RuneScape
-
 [![Discord](https://img.shields.io/discord/384870460640329728.svg?logo=discord)](https://discord.gg/G2kxrnU)
 
-[**Download**](https://github.com/RuneStar/simple-client/releases)
+The simplest Old School RuneScape client
 
-Requires Java 7+
+### Requirements
 
-## Features
+Java 11+
 
-* Caches gamepack between runs
-* Unrestricted minimum size
-* Corrected default size
-* Fixed bouncing and flashing while resizing
+### Download
+
+### Running
+
+```
+java Client.java
+```
