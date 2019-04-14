@@ -43,12 +43,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public final class Client implements AppletStub, AppletContext {
+public final class SimpleClient implements AppletStub, AppletContext {
 
     public static void main(String[] args) throws Exception {
         System.setProperty("sun.awt.noerasebackground", "true"); // fixes resize flickering
 
-        Client c = load();
+        SimpleClient c = load();
 
         final Path gamepack = Files.createTempFile("runescape-gamepack", ".jar");
         try (InputStream in = c.gamepackUrl().openStream()) {
@@ -56,20 +56,17 @@ public final class Client implements AppletStub, AppletContext {
         }
 
         final URLClassLoader classLoader = new URLClassLoader(new URL[] { gamepack.toUri().toURL() });
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override public void run() {
-                try {
-                    classLoader.close();
-                    Files.delete(gamepack);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                classLoader.close();
+                Files.delete(gamepack);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }));
 
         Applet applet = (Applet) classLoader.loadClass(c.initialClass()).getDeclaredConstructor().newInstance();
 
-        applet.setLayout(null); // fixes resize bouncing
         applet.setStub(c);
         applet.setMaximumSize(c.appletMaxSize());
         applet.setMinimumSize(c.appletMinSize());
@@ -93,7 +90,7 @@ public final class Client implements AppletStub, AppletContext {
 
     private final Map<String, String> parameters;
 
-    private Client(
+    private SimpleClient(
             Map<String, String> properties,
             Map<String, String> parameters
     ) {
@@ -137,7 +134,7 @@ public final class Client implements AppletStub, AppletContext {
         return fileName.substring(0, fileName.length() - 6);
     }
 
-    public static Client load() throws IOException {
+    public static SimpleClient load() throws IOException {
         Map<String, String> properties = new HashMap<>();
         Map<String, String> parameters = new HashMap<>();
         URL url = new URL("http://oldschool.runescape.com/jav_config.ws");
@@ -158,7 +155,7 @@ public final class Client implements AppletStub, AppletContext {
                 }
             }
         }
-        return new Client(properties, parameters);
+        return new SimpleClient(properties, parameters);
     }
 
     @Override public boolean isActive() {
