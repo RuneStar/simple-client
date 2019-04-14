@@ -1,6 +1,6 @@
 [![Discord](https://img.shields.io/discord/384870460640329728.svg?logo=discord)](https://discord.gg/G2kxrnU)
 
-The simplest Old School RuneScape client
+A minimal Old School RuneScape client
 
 Requires Java 11+
 
