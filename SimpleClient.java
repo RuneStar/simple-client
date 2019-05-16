@@ -54,14 +54,7 @@ public final class SimpleClient implements AppletStub, AppletContext {
 
         SimpleClient c = load();
 
-        ClassLoader classLoader = c.gamepackClassLoader();
-
-        Applet applet = (Applet) classLoader.loadClass(c.initialClass()).getDeclaredConstructor().newInstance();
-
-        applet.setStub(c);
-        applet.setMaximumSize(c.appletMaxSize());
-        applet.setMinimumSize(c.appletMinSize());
-        applet.setPreferredSize(applet.getMinimumSize());
+        Applet applet = c.loadApplet();
 
         JFrame frame = new JFrame(c.title());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -89,37 +82,6 @@ public final class SimpleClient implements AppletStub, AppletContext {
         this.parameters = parameters;
     }
 
-    public String title() {
-        return properties.get("title");
-    }
-
-    @Override public URL getCodeBase() {
-        try {
-            return new URL(properties.get("codebase"));
-        } catch (MalformedURLException e) {
-            throw new InvalidParameterException();
-        }
-    }
-
-    public Dimension appletMinSize() {
-        return new Dimension(
-                Integer.parseInt(properties.get("applet_minwidth")),
-                Integer.parseInt(properties.get("applet_minheight"))
-        );
-    }
-
-    public Dimension appletMaxSize() {
-        return new Dimension(
-                Integer.parseInt(properties.get("applet_maxwidth")),
-                Integer.parseInt(properties.get("applet_maxheight"))
-        );
-    }
-
-    public String initialClass() {
-        String fileName = properties.get("initial_class");
-        return fileName.substring(0, fileName.length() - 6);
-    }
-
     public static SimpleClient load() throws IOException {
         Map<String, String> properties = new HashMap<>();
         Map<String, String> parameters = new HashMap<>();
@@ -144,20 +106,76 @@ public final class SimpleClient implements AppletStub, AppletContext {
         return new SimpleClient(properties, parameters);
     }
 
-    @Override public boolean isActive() {
-        return true;
+    public Applet loadApplet() throws Exception {
+        Applet applet = (Applet) classLoader(gamepackUrl()).loadClass(initialClass()).getDeclaredConstructor().newInstance();
+        applet.setStub(this);
+        applet.setMaximumSize(appletMaxSize());
+        applet.setMinimumSize(appletMinSize());
+        applet.setPreferredSize(applet.getMinimumSize());
+        return applet;
+    }
+
+    public String title() {
+        return properties.get("title");
+    }
+
+    private Dimension appletMinSize() {
+        return new Dimension(
+                Integer.parseInt(properties.get("applet_minwidth")),
+                Integer.parseInt(properties.get("applet_minheight"))
+        );
+    }
+
+    private Dimension appletMaxSize() {
+        return new Dimension(
+                Integer.parseInt(properties.get("applet_maxwidth")),
+                Integer.parseInt(properties.get("applet_maxheight"))
+        );
+    }
+
+    private URL gamepackUrl() throws MalformedURLException {
+        return new URL(properties.get("codebase") + properties.get("initial_jar"));
+    }
+
+    private String initialClass() {
+        String fileName = properties.get("initial_class");
+        return fileName.substring(0, fileName.length() - 6);
+    }
+
+    @Override public URL getCodeBase() {
+        try {
+            return new URL(properties.get("codebase"));
+        } catch (MalformedURLException e) {
+            throw new InvalidParameterException();
+        }
     }
 
     @Override public URL getDocumentBase() {
         return getCodeBase();
     }
 
+    @Override public boolean isActive() {
+        return true;
+    }
+
     @Override public String getParameter(String name) {
         return parameters.get(name);
     }
 
+    @Override public void showDocument(URL url) {
+        try {
+            Desktop.getDesktop().browse(url.toURI());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override public void showDocument(URL url, String target) {
+        showDocument(url);
+    }
+
     @Override public AppletContext getAppletContext() {
-        return null;
+        return this;
     }
 
     @Override public void appletResize(int width, int height) {}
@@ -178,18 +196,6 @@ public final class SimpleClient implements AppletStub, AppletContext {
         throw new UnsupportedOperationException();
     }
 
-    @Override public void showDocument(URL url) {
-        try {
-            Desktop.getDesktop().browse(url.toURI());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override public void showDocument(URL url, String target) {
-        showDocument(url);
-    }
-
     @Override public void showStatus(String status) {
         throw new UnsupportedOperationException();
     }
@@ -206,10 +212,9 @@ public final class SimpleClient implements AppletStub, AppletContext {
         throw new UnsupportedOperationException();
     }
 
-    public ClassLoader gamepackClassLoader() throws IOException {
-        URL gamepackUrl = new URL(properties.get("codebase") + properties.get("initial_jar"));
+    private static ClassLoader classLoader(URL jarUrl) throws IOException {
         Map<String, byte[]> files = new HashMap<>();
-        try (JarInputStream jar = new JarInputStream(new BufferedInputStream(gamepackUrl.openStream()))) {
+        try (JarInputStream jar = new JarInputStream(new BufferedInputStream(jarUrl.openStream()))) {
             JarEntry entry;
             while ((entry = jar.getNextJarEntry()) != null) {
                 files.put('/' + entry.getName(), jar.readAllBytes());
