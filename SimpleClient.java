@@ -25,22 +25,26 @@ import java.applet.AudioClip;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.security.InvalidParameterException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 @SuppressWarnings("deprecation")
 public final class SimpleClient implements AppletStub, AppletContext {
@@ -50,20 +54,7 @@ public final class SimpleClient implements AppletStub, AppletContext {
 
         SimpleClient c = load();
 
-        final Path gamepack = Files.createTempFile("runescape-gamepack", ".jar");
-        try (InputStream in = c.gamepackUrl().openStream()) {
-            Files.copy(in, gamepack, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        final URLClassLoader classLoader = new URLClassLoader(new URL[] { gamepack.toUri().toURL() });
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                classLoader.close();
-                Files.delete(gamepack);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }));
+        ClassLoader classLoader = c.gamepackClassLoader();
 
         Applet applet = (Applet) classLoader.loadClass(c.initialClass()).getDeclaredConstructor().newInstance();
 
@@ -108,11 +99,6 @@ public final class SimpleClient implements AppletStub, AppletContext {
         } catch (MalformedURLException e) {
             throw new InvalidParameterException();
         }
-    }
-
-    public URL gamepackUrl() throws MalformedURLException {
-        return new URL(properties.get("codebase") + properties.get("initial_jar"));
-
     }
 
     public Dimension appletMinSize() {
@@ -218,5 +204,30 @@ public final class SimpleClient implements AppletStub, AppletContext {
 
     @Override public Iterator<String> getStreamKeys() {
         throw new UnsupportedOperationException();
+    }
+
+    public ClassLoader gamepackClassLoader() throws IOException {
+        URL gamepackUrl = new URL(properties.get("codebase") + properties.get("initial_jar"));
+        Map<String, byte[]> files = new HashMap<>();
+        try (JarInputStream jar = new JarInputStream(new BufferedInputStream(gamepackUrl.openStream()))) {
+            JarEntry entry;
+            while ((entry = jar.getNextJarEntry()) != null) {
+                files.put('/' + entry.getName(), jar.readAllBytes());
+            }
+        }
+        URL url = new URL("x-buffer", null, -1, "/", new URLStreamHandler() {
+            @Override protected URLConnection openConnection(URL u) throws FileNotFoundException {
+                byte[] data = files.get(u.getFile());
+                if (data == null) throw new FileNotFoundException(u.getFile());
+                return new URLConnection(u) {
+                    @Override public void connect() {}
+
+                    @Override public InputStream getInputStream() {
+                        return new ByteArrayInputStream(data);
+                    }
+                };
+            }
+        });
+        return new URLClassLoader(new URL[]{url});
     }
 }
