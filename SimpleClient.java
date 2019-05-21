@@ -226,7 +226,9 @@ public final class SimpleClient implements AppletStub, AppletContext {
                 if (data == null) throw new FileNotFoundException(u.getFile());
                 return new URLConnection(u) {
                     @Override public void connect() {}
-
+                    @Override public long getContentLengthLong() {
+                        return data.length;
+                    }
                     @Override public InputStream getInputStream() {
                         return new ByteArrayInputStream(data);
                     }
